@@ -9,6 +9,6 @@ The project structure is based on [`create-next-app`](https://github.com/vercel/
 - Designed and developed from scratch using Next.js
 - Used **AI and LLM tools** (like ChatGPT) to refine UI/UX, generate content ideas, and optimize styling
 - Live preview available at:  
-  👉 **[https://gavkareshubham.github.io/Pfo/](https://gavkareshubham.github.io/Pfo/)**
+  👉 **[Visit the website](https://shubhamgavkare.vercel.app/)**
 
 
