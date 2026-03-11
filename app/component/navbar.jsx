@@ -1,81 +1,37 @@
-import React, { useEffect, useRef, useState } from "react";
-import Image from 'next/image'
-import { assets } from "@/assets/assets";
+'use client'
+import React, { useEffect, useState } from "react";
 
 const Navbar = () => {
-
-    const [isScroll, setisScroll] = useState(false);
-    const sideMenuref = useRef();
-
-    const openMenu = () => {
-        sideMenuref.current.style.transform = 'translateX(-16rem)'
-    }
-
-    const closeMenu = () => {
-        sideMenuref.current.style.transform = 'translateX(16rem)'
-    }
+    const [scrolled, setScrolled] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
 
     useEffect(() => {
-        const handleScroll = () => {
-            if (window.scrollY > 50) {
-                setisScroll(true);
-            } else {
-                setisScroll(false);
-            }
-        };
-
+        const handleScroll = () => setScrolled(window.scrollY > 50);
         window.addEventListener('scroll', handleScroll);
-
-        // Cleanup listener on unmount
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    const navLinks = [
+        { label: "Home", href: "#top" },
+        { label: "Projects", href: "#projects" },
+        { label: "Contact", href: "#contact" },
+    ];
 
     return (
-        <>
-            <div className="fixed  top-0 right-0 w-11/12 -z-10 translate-y-[-80%] ">
-                <Image src={assets.header_bg_color} alt="" className="w-full" />
-            </div>
-            <nav className={`w-full fixed lg:px-8 xl:px[8%] flex items-center justify-between px-12 py-3 z-50 ${isScroll ? "bg-white/30 backdrop-blur-md shadow-md transition duration-300" : ""}
-`}>
-                <div className="relative mr-14">
-                    {/* Aesthetic Gray Blob Behind Logo */}
-                    <div className="absolute -top-4 -left-2 w-30 h-20 bg-gray-600 opacity-50 blur-2xl rounded-full z-[-1]" />
+        <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? "bg-[#0B0B0C]/90 backdrop-blur-md border-b border-[#1E1E22]" : ""}`}>
+            <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+                {/* Logo */}
+                <a href="#top" className="font-mono text-[#00E5FF] text-sm font-medium tracking-widest hover:opacity-75 transition-opacity">
+                    sg<span className="text-[#8B8B90]">.dev</span>
+                </a>
 
-                    {/* Logo */}
-                    <a href="#top">
-                        <Image src={assets.logo} alt="Logo" className="w-28 cursor-pointer relative z-10" />
-                    </a>
-                </div>
-
-
-                {/* <ul className="hidden md:flex items-center gap-6 lg:gap-8 rounded-full px-12 py-3 bg-white shadow-sm bg-opacity-50 ">
-                    <li><a href="#top">Home</a></li>
-                    <li><a href="#about">About me</a></li>
-                    <li><a href="#service">Services</a></li>
-                    <li><a href="#blogs">Blogs</a></li>
-                    <li><a href="#worl">My work</a></li>
-                    <li><a href="#contact">Contact me</a></li>
-                </ul> */}
-
-                <ul className="font-Ovo hidden md:flex items-center gap-6 lg:gap-8 rounded-full px-12 py-4 bg-white shadow-sm  bg-opacity-30">
-                    {[
-                        { label: "Home", href: "#top" },
-                        { label: "About me", href: "#about" },
-                        { label: "Services", href: "#service" },
-                        { label: "Blogs", href: "#blogs" },
-                        { label: "My work", href: "#work" },
-                        { label: "Contact me", href: "#contact" },
-                    ].map((item, index) => (
-                        <li key={index}>
+                {/* Desktop Nav */}
+                <ul className="hidden md:flex items-center gap-8">
+                    {navLinks.map((item) => (
+                        <li key={item.href}>
                             <a
                                 href={item.href}
-                                className="relative font-medium text-gray-700 transition duration-300
-          hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-cyan-500 hover:to-blue-600
-          before:absolute before:-bottom-1 before:left-1/2 before:w-0 before:h-0.5
-          before:bg-gradient-to-r before:from-cyan-500 before:to-blue-600
-          before:rounded-full before:transition-all before:duration-300
-          hover:before:w-full hover:before:left-0"
+                                className="text-[#8B8B90] text-sm font-medium hover:text-[#E5E5E5] transition-colors duration-200 tracking-wide"
                             >
                                 {item.label}
                             </a>
@@ -83,51 +39,56 @@ const Navbar = () => {
                     ))}
                 </ul>
 
+                {/* GitHub CTA */}
+                <a
+                    href="https://github.com/GavkareShubham"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hidden md:block font-mono text-xs border border-[#1E1E22] text-[#00E5FF] px-4 py-2 rounded hover:border-[#00E5FF]/40 hover:bg-[#00E5FF]/5 transition-all duration-200"
+                >
+                    GitHub ↗
+                </a>
 
-                <div className="flex items-center gap-4">
-                    {/* Dark mode toggle */}
-                    <button>
-                        <Image src={assets.moon_icon} alt="" className="w-6" />
-                    </button>
+                {/* Mobile menu button */}
+                <button
+                    className="md:hidden text-[#8B8B90] hover:text-[#E5E5E5] transition-colors"
+                    onClick={() => setMenuOpen(!menuOpen)}
+                    aria-label="Toggle menu"
+                >
+                    <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        {menuOpen
+                            ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
+                            : <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
+                        }
+                    </svg>
+                </button>
+            </div>
 
-                    {/* Contact Button */}
+            {/* Mobile Menu */}
+            {menuOpen && (
+                <div className="md:hidden bg-[#121214] border-b border-[#1E1E22] px-6 py-4 space-y-3">
+                    {navLinks.map((item) => (
+                        <a
+                            key={item.href}
+                            href={item.href}
+                            onClick={() => setMenuOpen(false)}
+                            className="block text-sm text-[#8B8B90] hover:text-[#E5E5E5] transition-colors"
+                        >
+                            {item.label}
+                        </a>
+                    ))}
                     <a
-                        href="#contact"
-                        className="hidden lg:flex items-center gap-2 px-6 py-2 relative border border-gray-600  
-                        bg-white/10 backdrop-blur-md rounded-full transition-all duration-300 text-gray-800
-                        hover:scale-105 hover:shadow-lg hover:bg-gradient-to-r from-cyan-500 to-red-500 group font-Ovo"
+                        href="https://github.com/GavkareShubham"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block font-mono text-xs text-[#00E5FF] pt-1"
                     >
-                        <span className="relative z-10 group-hover:text-white transition-colors duration-300">
-                            Contact
-                        </span>
-                        <span className="relative z-10 transition-transform duration-300 transform group-hover:translate-x-1">
-                            <Image src={assets.arrow_icon} alt="arrow" className="w-3" />
-                        </span>
-                        <span className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-500 to-red-500 opacity-50 blur-lg transition-all duration-500 group-hover:opacity-80"></span>
+                        GitHub ↗
                     </a>
-
-                    {/* Mobile menu button */}
-                    <button className="block md:hidden ml-3" onClick={openMenu}>
-                        <Image src={assets.menu_black} alt="" className="w-6" />
-                    </button>
                 </div>
+            )}
+        </nav>
+    );
+};
 
-
-                {/* mobile menu */}
-                <ul ref={sideMenuref} className="flex md:hidden flex-col gap-4 py-20 px-10 fixed -right-64 top-0 bottom-0 w-64 z-50 h-screen bg-rose-50 transition duration-500 ">
-                    <div className="absolute right-6 top-6" onClick={closeMenu} >
-                        <Image src={assets.close_black} alt="" className="w-5 cursor-pointer" />
-                    </div>
-                    <li><a onClick={closeMenu} className='font-Ovo' href="#top">Home</a></li>
-                    <li><a onClick={closeMenu} className='font-Ovo' href="#about">About me</a></li>
-                    <li><a onClick={closeMenu} className='font-Ovo' href="#service">Services</a></li>
-                    <li><a onClick={closeMenu} className='font-Ovo' href="#blogs">Blogs</a></li>
-                    <li><a onClick={closeMenu} className='font-Ovo' href="#worl">My work</a></li>
-                    <li><a onClick={closeMenu} className='font-Ovo' href="#contact">Contact me</a></li>
-                </ul>
-            </nav>
-        </>
-    )
-}
-
-export default Navbar
+export default Navbar;

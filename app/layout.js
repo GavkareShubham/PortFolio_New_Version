@@ -1,24 +1,32 @@
-import { Outfit, Ovo } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const outfit = Outfit({
-  subsets: ["latin"],weight:["400","500","600","700"]
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
 
-const ovo = Ovo({
-  subsets: ["latin"],weight:["400"]
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  weight: ["400", "500", "600"],
+  display: "swap",
 });
 
 export const metadata = {
-  title: "Shubham Gavkare - Portfolio",
-  description: "This is Shubham's portfolio website showcasing my work and skills.",
+  title: "Shubham Gavkare — Software Engineer",
+  description:
+    "Low-Latency Trading Systems · Multithreading · Distributed Systems · FIX Protocol",
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="scroll-smooth ">
+    <html lang="en" className="scroll-smooth">
       <body
-        className={`${outfit.className} ${ovo.className} antialiased  leading-1 overflow-x-hidden `}   // dark:bg-darkTheme dark:text-white
+        suppressHydrationWarning
+        className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased bg-[#0B0B0C] text-[#E5E5E5] overflow-x-hidden`}
       >
         {children}
       </body>

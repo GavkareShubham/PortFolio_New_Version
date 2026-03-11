@@ -1,27 +1,15 @@
-import { assets } from '@/assets/assets';
+'use client'
 import React, { useState } from 'react';
-import Image from 'next/image';
 import { motion } from 'framer-motion';
-
-const fadeInUp = {
-    hidden: { opacity: 0, y: 30 },
-    visible: (i = 0) => ({
-        opacity: 1,
-        y: 0,
-        transition: {
-            delay: i * 0.2,
-            duration: 0.6,
-            ease: 'easeOut',
-        },
-    }),
-};
 
 const Contact = () => {
     const [result, setResult] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const onSubmit = async (event) => {
         event.preventDefault();
-        setResult('Sending....');
+        setLoading(true);
+        setResult('');
         const formData = new FormData(event.target);
         formData.append('access_key', process.env.NEXT_PUBLIC_WEB3FORM_KEY);
 
@@ -29,122 +17,143 @@ const Contact = () => {
             method: 'POST',
             body: formData,
         });
-
         const data = await response.json();
+        setLoading(false);
 
         if (data.success) {
-            setResult('Form Submitted Successfully');
+            setResult('Message sent successfully.');
             event.target.reset();
         } else {
-            console.log('Error', data);
-            setResult(data.message);
+            setResult('Failed to send. Please try again.');
         }
     };
 
+    const contactLinks = [
+        {
+            label: 'Email',
+            value: 'shubhamgavkare07@gmail.com',
+            href: 'mailto:shubhamgavkare07@gmail.com',
+        },
+        {
+            label: 'LinkedIn',
+            value: 'linkedin.com/in/shubhamgavkare',
+            href: 'https://linkedin.com/in/shubhamgavkare',
+        },
+        {
+            label: 'GitHub',
+            value: 'github.com/GavkareShubham',
+            href: 'https://github.com/GavkareShubham',
+        },
+    ];
+
     return (
-        <div
-            id="contact"
-            className="w-full px-4 sm:px-[10%] py-10 scroll-mt-20 overflow-x-hidden"
-        >
-            {/* Heading */}
-            <motion.h4
-                className="text-center mb-2 text-lg font-Ovo"
-                variants={fadeInUp}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                custom={0}
-            >
-                Want to connect with me!
-            </motion.h4>
-
-            <motion.h2
-                className="text-center text-4xl sm:text-5xl font-Ovo"
-                variants={fadeInUp}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                custom={0.2}
-            >
-                Get in touch
-            </motion.h2>
-
-            <motion.p
-                className="text-center text-gray-600 mt-6 mb-10 max-w-2xl mx-auto font-Ovo leading-relaxed"
-                variants={fadeInUp}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                custom={0.4}
-            >
-                Let's build something amazing together! Whether it's an idea, a project, or just a tech chat — I'm just a message away.
-            </motion.p>
-
-            {/* Form */}
-            <motion.form
-                onSubmit={onSubmit}
-                className="max-w-2xl mx-auto"
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={{
-                    visible: {
-                        transition: { staggerChildren: 0.15 },
-                    },
-                }}
-            >
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10 mb-8">
-                    <motion.input
-                        variants={fadeInUp}
-                        custom={0}
-                        className="w-full p-3 outline-none border border-gray-400 rounded-md bg-white"
-                        type="text"
-                        placeholder="Enter your name"
-                        name="name"
-                        required
-                    />
-                    <motion.input
-                        variants={fadeInUp}
-                        custom={1}
-                        className="w-full p-3 outline-none border border-gray-400 rounded-md bg-white"
-                        type="email"
-                        placeholder="Enter your email"
-                        name="email"
-                        required
-                    />
-                </div>
-
-                <motion.textarea
-                    variants={fadeInUp}
-                    custom={2}
-                    rows={6}
-                    placeholder="Enter your message"
-                    name="message"
-                    required
-                    className="w-full p-4 outline-none border border-gray-400 rounded-md bg-white mb-6"
-                ></motion.textarea>
-
-                <motion.button
-                    type="submit"
-                    variants={fadeInUp}
-                    custom={3}
-                    className="flex font-sans gap-2 items-center mx-auto bg-gray-700 text-white py-3 px-10 rounded-full font-semibold hover:bg-black transition-all duration-300"
+        <section id="contact" className="py-24 border-t border-[#1E1E22]">
+            <div className="max-w-6xl mx-auto px-6">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="mb-10"
                 >
-                    Submit now <Image src={assets.right_arrow_white} alt="" className="w-4" />
-                </motion.button>
+                    <span className="font-mono text-[#00E5FF] text-[11px] tracking-[0.25em] uppercase mb-2 block">
+                        Get In Touch
+                    </span>
+                    <h2 className="text-3xl font-bold text-[#E5E5E5]">Contact</h2>
+                </motion.div>
 
-                {result && (
-                    <motion.p
-                        className="font-sm font-sans mt-4 text-center"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
+                <div className="grid lg:grid-cols-2 gap-12">
+                    {/* Left â€” description + links */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
                         transition={{ duration: 0.5 }}
                     >
-                        {result}
-                    </motion.p>
-                )}
-            </motion.form>
-        </div>
+                        <p className="text-[#8B8B90] text-sm leading-relaxed mb-8 max-w-md">
+                            Open to roles in systems engineering, trading infrastructure, and low-latency
+                            software development. Happy to discuss technical architecture, performance
+                            optimization, or just geek out about C++.
+                        </p>
+
+                        <div className="space-y-3">
+                            {contactLinks.map((link) => (
+                                <a
+                                    key={link.label}
+                                    href={link.href}
+                                    target={link.label !== 'Email' ? '_blank' : '_self'}
+                                    rel="noopener noreferrer"
+                                    className="flex items-center justify-between bg-[#121214] border border-[#1E1E22] rounded-lg px-5 py-3.5 hover:border-[#00E5FF]/20 transition-all duration-200 group"
+                                >
+                                    <span className="font-mono text-[11px] text-[#8B8B90] group-hover:text-[#E5E5E5] transition-colors">
+                                        {link.label}
+                                    </span>
+                                    <span className="font-mono text-[11px] text-[#00E5FF] opacity-70 group-hover:opacity-100 transition-opacity">
+                                        {link.value}
+                                    </span>
+                                </a>
+                            ))}
+                        </div>
+                    </motion.div>
+
+                    {/* Right â€” form */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.1, duration: 0.5 }}
+                    >
+                        <form onSubmit={onSubmit} className="space-y-4">
+                            <div>
+                                <label className="font-mono text-[10px] text-[#8B8B90] tracking-widest uppercase block mb-1.5">
+                                    name
+                                </label>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    required
+                                    placeholder="Firstname Lastname"
+                                    className="w-full bg-[#121214] border border-[#1E1E22] rounded-lg px-4 py-3 text-sm text-[#E5E5E5] placeholder-[#8B8B90]/40 focus:outline-none focus:border-[#00E5FF]/30 transition-colors font-mono"
+                                />
+                            </div>
+                            <div>
+                                <label className="font-mono text-[10px] text-[#8B8B90] tracking-widest uppercase block mb-1.5">
+                                    email
+                                </label>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    required
+                                    placeholder="you@example.com"
+                                    className="w-full bg-[#121214] border border-[#1E1E22] rounded-lg px-4 py-3 text-sm text-[#E5E5E5] placeholder-[#8B8B90]/40 focus:outline-none focus:border-[#00E5FF]/30 transition-colors font-mono"
+                                />
+                            </div>
+                            <div>
+                                <label className="font-mono text-[10px] text-[#8B8B90] tracking-widest uppercase block mb-1.5">
+                                    message
+                                </label>
+                                <textarea
+                                    name="message"
+                                    required
+                                    rows={5}
+                                    placeholder="What's on your mind..."
+                                    className="w-full bg-[#121214] border border-[#1E1E22] rounded-lg px-4 py-3 text-sm text-[#E5E5E5] placeholder-[#8B8B90]/40 focus:outline-none focus:border-[#00E5FF]/30 transition-colors font-mono resize-none"
+                                />
+                            </div>
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className="w-full font-mono text-sm py-3 bg-[#00E5FF] text-[#0B0B0C] rounded font-semibold hover:bg-[#00E5FF]/90 transition-all duration-200 hover:shadow-[0_0_20px_rgba(0,229,255,0.2)] disabled:opacity-40 disabled:cursor-not-allowed"
+                            >
+                                {loading ? 'Sending...' : 'Send Message →'}
+                            </button>
+                            {result && (
+                                <p className="font-mono text-xs text-center text-[#8B8B90]">{result}</p>
+                            )}
+                        </form>
+                    </motion.div>
+                </div>
+            </div>
+        </section>
     );
 };
 

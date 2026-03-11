@@ -1,184 +1,164 @@
-import React from 'react';
-import Image from 'next/image';
-import { assets } from "@/assets/assets";
-import { Typewriter } from 'react-simple-typewriter';
+'use client'
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import Tilt from 'react-parallax-tilt';
 
-// Animation variants
-const fadeUp = {
-    hidden: { opacity: 0, y: 30 },
-    visible: (i = 0) => ({
-        opacity: 1,
-        y: 0,
-        transition: { delay: i * 0.2, duration: 0.8, ease: 'easeOut' }
-    }),
-};
+const terminalLines = [
+    { text: '$ ./orderbook --benchmark', type: 'cmd' },
+    { text: 'initializing lock-free queue...', type: 'muted' },
+    { text: 'warming up SPSC ring buffer...', type: 'muted' },
+    { text: 'throughput:  1.2M ops/sec', type: 'accent' },
+    { text: 'p50 latency: 48Âµs', type: 'accent' },
+    { text: 'p99 latency: 92Âµs', type: 'accent' },
+    { text: '[OK] benchmark complete', type: 'green' },
+];
 
-const popIn = {
-    hidden: { scale: 0, opacity: 0 },
-    visible: { scale: 1, opacity: 1, transition: { type: 'spring', stiffness: 100, duration: 1 } }
-};
+const TerminalWidget = () => {
+    const [visibleCount, setVisibleCount] = useState(0);
 
-const shake = {
-    animate: {
-        rotate: [0, -10, 10, -10, 0],
-        transition: {
-            duration: 1.5,
-            repeat: Infinity,
-            ease: "easeInOut"
-        }
-    }
-};
+    useEffect(() => {
+        if (visibleCount >= terminalLines.length) return;
+        const timer = setTimeout(() => {
+            setVisibleCount((c) => c + 1);
+        }, visibleCount === 0 ? 800 : 400);
+        return () => clearTimeout(timer);
+    }, [visibleCount]);
 
-const Header = () => {
+    const colorMap = {
+        cmd: 'text-[#E5E5E5]',
+        muted: 'text-[#8B8B90]',
+        accent: 'text-[#00E5FF]',
+        green: 'text-[#28C840]',
+    };
+
     return (
-        <div className="relative w-full h-screen overflow-hidden bg-white">
-            {/* Background Shapes */}
-            <div className="absolute inset-0 z-0 overflow-hidden">
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 0.2, scale: 1 }}
-                    transition={{ duration: 2, repeat: Infinity, repeatType: 'mirror' }}
-                    className="absolute w-64 h-64 bg-purple-600 rounded-full filter blur-3xl top-10 left-10"
-                />
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 0.2, scale: 1 }}
-                    transition={{ duration: 3, delay: 1, repeat: Infinity, repeatType: 'mirror' }}
-                    className="absolute w-80 h-80 bg-pink-400 rounded-full filter blur-3xl bottom-10 right-10"
-                />
+        <div className="bg-[#121214] border border-[#1E1E22] rounded-lg overflow-hidden w-full max-w-sm shadow-2xl">
+            {/* Title bar */}
+            <div className="flex items-center gap-1.5 px-4 py-3 border-b border-[#1E1E22] bg-[#0F0F11]">
+                <div className="w-2.5 h-2.5 rounded-full bg-[#FF5F57]" />
+                <div className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]" />
+                <div className="w-2.5 h-2.5 rounded-full bg-[#28C840]" />
+                <span className="ml-2 text-[#8B8B90] text-[10px] font-mono">orderbook_bench.cpp</span>
             </div>
-
-            {/* Abstract Objects */}
-            <div className="absolute inset-0 z-0 pointer-events-none">
-                <motion.div
-                    className="absolute w-20 h-20 border-4 border-purple-500 rounded-lg rotate-[25deg] top-[20%] left-[8%] shadow-xl"
-                    initial={{ y: 0, rotate: 0, scale: 1 }}
-                    animate={{ y: [0, -10, 0], rotate: [0, 45, 0], scale: [0.3, 0.5, 0.3] }}
-                    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                />
-                <motion.div
-                    className="absolute w-20 h-20 border-4 border-purple-500 rounded-lg rotate-[25deg] top-[80%] left-[18%] shadow-xl"
-                    initial={{ y: 0, rotate: 0, scale: 1 }}
-                    animate={{ y: [0, -10, 0], rotate: [0, 30, 0], scale: [0.2, 0.3, 0.3] }}
-                    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                />
-                <motion.div
-                    className="absolute w-40 h-40 bg-gradient-to-tr from-pink-300 to-red-400 opacity-30 blur-3xl clip-blob top-[20%] right-[10%]"
-                    initial={{ scale: 0.8 }}
-                    animate={{ scale: [0.2, 0.5, 0.2] }}
-                    transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-                />
-            </div>
-
-            {/* Header Content */}
-            <div className='relative z-10 w-full px-6 sm:px-8 max-w-3xl text-center mx-auto h-full flex flex-col items-center justify-center gap-4 sm:gap-6'>
-
-                {/* Profile Image */}
-                <motion.div variants={popIn} initial="hidden" animate="visible">
-                    <Tilt tiltMaxAngleX={15} tiltMaxAngleY={15} glareEnable={true} glareColor="white" className="rounded-full mx-auto">
-                        <Image
-                            src={assets.profile_img}
-                            alt='Profile'
-                            className='rounded-full w-38 h-38 shadow-[0_0_20px_rgba(156,39,176,0.5)] transition duration-500 hover:shadow-[0_0_30px_rgba(156,39,176,0.9)] mt-28'
-                        />
-                    </Tilt>
-                </motion.div>
-
-                {/* Greeting */}
-                <motion.h3
-                    className='flex items-center justify-center gap-2 text-xl sm:text-2xl mb-1'
-                    variants={fadeUp}
-                    initial="hidden"
-                    animate="visible"
-                    custom={1}
-                >
-                    Hi! I'm Shubham Gavkare
-                    <motion.span {...shake}>
-                        <Image src={assets.hand_icon} className='w-5' alt='Hand' />
-                    </motion.span>
-                </motion.h3>
-
-                {/* Typewriter Title */}
-                <motion.h1
-                    className='text-2xl sm:text-5xl lg:text-[50px] font-Ovo leading-tight'
-                    variants={fadeUp}
-                    initial="hidden"
-                    animate="visible"
-                    custom={2}
-                >
-                    I’m a{" "}
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 animate-text font-bold">
-                        <Typewriter
-                            words={['Software Developer', 'C++ Developer', 'Fullstack Developer', 'Freelancer']}
-                            loop={true}
-                            cursor
-                            cursorStyle='|'
-                            typeSpeed={80}
-                            deleteSpeed={50}
-                            delaySpeed={1500}
-                        />
-                    </span>
-                </motion.h1>
-
-                {/* Description */}
-                <motion.p
-                    className='max-w-2xl mx-auto font-Ovo text-gray-600 mt-2 text-sm sm:text-lg'
-                    variants={fadeUp}
-                    initial="hidden"
-                    animate="visible"
-                    custom={3}
-                >
-                    💡 I'm a Creative Developer passionate about building ✨ beautiful web experiences and 🔧 robust backend systems using modern technologies like Modern C++, Data Structures, OOD
-                </motion.p>
-
-                {/* Buttons */}
-                <motion.div
-                    className='flex flex-col sm:flex-row items-center gap-4 mt-3'
-                    variants={fadeUp}
-                    initial="hidden"
-                    animate="visible"
-                    custom={4}
-                >
-                    <a
-                        href="#contact"
-                        className='group relative px-10 py-3 bg-black text-white border border-white rounded-full flex items-center gap-2 transition-all duration-300 overflow-hidden shadow-lg hover:shadow-purple-500/40'
+            {/* Terminal output */}
+            <div className="p-5 font-mono text-xs space-y-1 min-h-[140px]">
+                {terminalLines.slice(0, visibleCount).map((line, i) => (
+                    <motion.div
+                        key={i}
+                        initial={{ opacity: 0, x: -6 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.25 }}
+                        className={`leading-5 ${colorMap[line.type]}`}
                     >
-                        <span className="absolute inset-0 w-0 group-hover:w-full bg-purple-600 transition-all duration-500 ease-out z-0"></span>
-                        <span className="relative z-10 flex items-center gap-2">
-                            Contact me
-                            <Image src={assets.right_arrow_white} alt='Arrow' className='w-4' />
-                        </span>
-                    </a>
-
-                    <a
-                        href="/Shubham-Gavkare-Resume.pdf"
-                        download
-                        className='group relative px-10 py-2 border border-gray-500 text-gray-800 rounded-full flex items-center gap-2 transition-all duration-300 overflow-hidden hover:text-white hover:border-transparent shadow-md hover:shadow-indigo-500/40'
-                    >
-                        <span className="absolute inset-0 w-0 group-hover:w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 transition-all duration-500 ease-out z-0"></span>
-                        <span className="relative z-10 flex items-center gap-2">
-                            My Resume
-                            <Image src={assets.download_icon} alt='Download' className='w-4 font-Ovo' />
-                        </span>
-                    </a>
-                </motion.div>
-
-                {/* Scroll-down */}
-                <motion.div
-                    className="mt-3 animate-bounce"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 1.5 }}
-                >
-                    <a href="#about" className="text-gray-400 text-sm hover:text-black transition">
-                        ↓ Scroll down
-                    </a>
-                </motion.div>
+                        {line.text}
+                    </motion.div>
+                ))}
+                {visibleCount < terminalLines.length && (
+                    <span className="text-[#00E5FF] animate-pulse inline-block">â–Š</span>
+                )}
             </div>
         </div>
     );
 };
 
-export default Header;
+const Hero = () => {
+    return (
+        <section id="top" className="min-h-screen flex items-center pt-20 pb-12">
+            <div className="max-w-6xl mx-auto px-6 w-full">
+                <div className="grid lg:grid-cols-2 gap-16 items-center">
+                    {/* Left â€” text */}
+                    <div>
+                        <motion.span
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5 }}
+                            className="font-mono text-[#00E5FF] text-[11px] tracking-[0.25em] uppercase mb-5 block"
+                        >
+                            Open to opportunities
+                        </motion.span>
+
+                        <motion.h1
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, delay: 0.1 }}
+                            className="text-5xl sm:text-6xl font-bold text-[#E5E5E5] tracking-tight leading-[1.1] mb-3"
+                        >
+                            Shubham<br />Gavkare
+                        </motion.h1>
+
+                        <motion.h2
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, delay: 0.2 }}
+                            className="font-mono text-lg text-[#8B5CF6] mb-4 font-medium"
+                        >
+                            C++ Systems Engineer
+                        </motion.h2>
+
+                        <motion.p
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, delay: 0.3 }}
+                            className="font-mono text-[#8B8B90] text-[11px] tracking-wide leading-5 mb-2"
+                        >
+                            Low-Latency Trading Systems Â· Multithreading<br />
+                            Distributed Systems Â· FIX Protocol
+                        </motion.p>
+
+                        <motion.p
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, delay: 0.35 }}
+                            className="text-[#8B8B90] text-sm leading-relaxed mt-4 mb-8 max-w-md"
+                        >
+                            Building high-performance trading infrastructure and real-time market-data pipelines.
+                        </motion.p>
+
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, delay: 0.45 }}
+                            className="flex flex-wrap gap-3"
+                        >
+                            <a
+                                href="https://github.com/GavkareShubham"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="font-mono text-sm px-5 py-2.5 bg-[#00E5FF] text-[#0B0B0C] rounded font-semibold hover:bg-[#00E5FF]/90 transition-all duration-200 hover:shadow-[0_0_24px_rgba(0,229,255,0.35)]"
+                            >
+                                GitHub
+                            </a>
+                            <a
+                                href="/Shubham-Gavkare-Resume.pdf"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="font-mono text-sm px-5 py-2.5 border border-[#1E1E22] text-[#E5E5E5] rounded hover:border-[#8B5CF6]/50 hover:bg-[#8B5CF6]/5 transition-all duration-200"
+                            >
+                                Resume
+                            </a>
+                            <a
+                                href="https://leetcode.com/u/shubhamgavkare/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="font-mono text-sm px-5 py-2.5 border border-[#1E1E22] text-[#8B8B90] rounded hover:border-[#8B8B90]/30 hover:text-[#E5E5E5] transition-all duration-200"
+                            >
+                                LeetCode
+                            </a>
+                        </motion.div>
+                    </div>
+
+                    {/* Right â€” terminal widget */}
+                    <motion.div
+                        initial={{ opacity: 0, x: 24 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.8, delay: 0.55 }}
+                        className="flex justify-center lg:justify-end"
+                    >
+                        <TerminalWidget />
+                    </motion.div>
+                </div>
+            </div>
+        </section>
+    );
+};
+
+export default Hero;

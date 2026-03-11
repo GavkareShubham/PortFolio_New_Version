@@ -9,25 +9,14 @@ export default {
     ],
     theme: {
         extend: {
-            colors: {
-                lightHover: '#fcf4ff',
-                darkHover: '#21004a',
-                darkTheme: '#11001F',
-            },
             fontFamily: {
-                Outfit: ["Outfit", 'sans-serif'],
-                Ovo: ["Ovo", 'serif'],
+                sans: ['var(--font-inter)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                mono: ['var(--font-mono)', 'ui-monospace', 'monospace'],
             },
-            animation: {
-                fadeInUp: 'fadeInUp 0.6s ease-out',
-                text: 'text 5s ease infinite',
-            },
-            keyframes: {
-                fadeInUp: {
-                    '0%': { opacity: 0, transform: 'translateY(20px)' },
-                    '100%': { opacity: 1, transform: 'translateY(0)' },
-                },
-                text: {
+        },
+    },
+    plugins: [],
+};
                     '0%, 100%': {
                         'background-size': '200% 200%',
                         'background-position': 'left center',
