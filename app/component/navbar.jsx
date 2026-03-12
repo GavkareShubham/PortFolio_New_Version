@@ -1,5 +1,6 @@
 'use client'
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 
 const Navbar = () => {
     const [scrolled, setScrolled] = useState(false);
@@ -12,41 +13,40 @@ const Navbar = () => {
     }, []);
 
     const navLinks = [
-        { label: "Home", href: "#top" },
-        { label: "Projects", href: "#projects" },
-        { label: "Contact", href: "#contact" },
+        { label: "Home", href: "/" },
+        { label: "Projects", href: "/#projects" },
+        { label: "Engineering Insights", href: "/insights" },
+        { label: "Contact", href: "/#contact" },
     ];
 
     return (
         <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? "bg-[#0B0B0C]/90 backdrop-blur-md border-b border-[#1E1E22]" : ""}`}>
             <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
                 {/* Logo */}
-                <a href="#top" className="font-mono text-[#00E5FF] text-sm font-medium tracking-widest hover:opacity-75 transition-opacity">
+                <Link href="/" className="font-mono text-[#00E5FF] text-sm font-medium tracking-widest hover:opacity-75 transition-opacity">
                     sg<span className="text-[#8B8B90]">.dev</span>
-                </a>
+                </Link>
 
                 {/* Desktop Nav */}
-                <ul className="hidden md:flex items-center gap-8">
+                <ul className="hidden md:flex items-center gap-7">
                     {navLinks.map((item) => (
                         <li key={item.href}>
-                            <a
+                            <Link
                                 href={item.href}
-                                className="text-[#8B8B90] text-sm font-medium hover:text-[#E5E5E5] transition-colors duration-200 tracking-wide"
+                                className="text-[#8B8B90] text-sm font-medium hover:text-[#E5E5E5] transition-colors duration-200 tracking-wide whitespace-nowrap"
                             >
                                 {item.label}
-                            </a>
+                            </Link>
                         </li>
                     ))}
                 </ul>
 
-                {/* GitHub CTA */}
+                {/* Hire Me CTA */}
                 <a
-                    href="https://github.com/GavkareShubham"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hidden md:block font-mono text-xs border border-[#1E1E22] text-[#00E5FF] px-4 py-2 rounded hover:border-[#00E5FF]/40 hover:bg-[#00E5FF]/5 transition-all duration-200"
+                    href="mailto:shubhamgavkare07@gmail.com?subject=Hiring%20Inquiry"
+                    className="hidden md:block font-mono text-xs bg-[#00E5FF] text-[#0B0B0C] px-4 py-2 rounded font-bold hover:shadow-[0_0_22px_rgba(0,229,255,0.45)] hover:bg-[#00E5FF]/90 transition-all duration-200"
                 >
-                    GitHub ↗
+                    Hire Me
                 </a>
 
                 {/* Mobile menu button */}
@@ -68,22 +68,20 @@ const Navbar = () => {
             {menuOpen && (
                 <div className="md:hidden bg-[#121214] border-b border-[#1E1E22] px-6 py-4 space-y-3">
                     {navLinks.map((item) => (
-                        <a
+                        <Link
                             key={item.href}
                             href={item.href}
                             onClick={() => setMenuOpen(false)}
                             className="block text-sm text-[#8B8B90] hover:text-[#E5E5E5] transition-colors"
                         >
                             {item.label}
-                        </a>
+                        </Link>
                     ))}
                     <a
-                        href="https://github.com/GavkareShubham"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="block font-mono text-xs text-[#00E5FF] pt-1"
+                        href="mailto:shubhamgavkare07@gmail.com?subject=Hiring%20Inquiry"
+                        className="block font-mono text-xs text-[#00E5FF] font-bold pt-1"
                     >
-                        GitHub ↗
+                        Hire Me →
                     </a>
                 </div>
             )}

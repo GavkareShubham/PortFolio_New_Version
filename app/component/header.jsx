@@ -1,77 +1,112 @@
-'use client'
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+﻿'use client'
+import React, { useRef } from 'react';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import ProfileSystemPanel from './ProfileSystemPanel';
 
-const terminalLines = [
-    { text: '$ ./orderbook --benchmark', type: 'cmd' },
-    { text: 'initializing lock-free queue...', type: 'muted' },
-    { text: 'warming up SPSC ring buffer...', type: 'muted' },
-    { text: 'throughput:  1.2M ops/sec', type: 'accent' },
-    { text: 'p50 latency: 48Âµs', type: 'accent' },
-    { text: 'p99 latency: 92Âµs', type: 'accent' },
-    { text: '[OK] benchmark complete', type: 'green' },
+// Infrastructure system nodes shown in hero background
+const OFFSET_X = 26;
+
+const NODES = [
+    { id: 'market-data', label: 'Market Data', x: 10 + OFFSET_X, y: 22, color: '#8B5CF6' },
+    { id: 'order-engine', label: 'Order Engine', x: 22 + OFFSET_X, y: 68, color: '#00E5FF' },
+    { id: 'fix-gateway', label: 'FIX Gateway', x: 6 + OFFSET_X, y: 50, color: '#00E5FF' },
+    { id: 'exec-router', label: 'Exec Router', x: 35 + OFFSET_X, y: 35, color: '#28C840' },
+    { id: 'risk-engine', label: 'Risk Engine', x: 18 + OFFSET_X, y: 84, color: '#F59E0B' },
 ];
 
-const TerminalWidget = () => {
-    const [visibleCount, setVisibleCount] = useState(0);
+const EDGES = [
+    ['market-data', 'fix-gateway'],
+    ['fix-gateway', 'order-engine'],
+    ['order-engine', 'exec-router'],
+    ['order-engine', 'risk-engine'],
+    ['market-data', 'exec-router'],
+];
 
-    useEffect(() => {
-        if (visibleCount >= terminalLines.length) return;
-        const timer = setTimeout(() => {
-            setVisibleCount((c) => c + 1);
-        }, visibleCount === 0 ? 800 : 400);
-        return () => clearTimeout(timer);
-    }, [visibleCount]);
+// const SystemNodes = () => {
+//     const nodeMap = Object.fromEntries(NODES.map(n => [n.id, n]));
+//     return (
+//         <div className="absolute inset-0 overflow-hidden pointer-events-none scale-90">
+//             <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+//                 {EDGES.map(([a, b]) => {
+//                     const na = nodeMap[a];
+//                     const nb = nodeMap[b];
+//                     return (
+//                         <motion.line
+//                             key={`${a}-${b}`}
+//                             x1={`${na.x}%`} y1={`${na.y}%`}
+//                             x2={`${nb.x}%`} y2={`${nb.y}%`}
+//                             stroke="#1E1E26" strokeWidth="1"
+//                             initial={{ opacity: 0 }}
+//                             animate={{ opacity: 1 }}
+//                             transition={{ duration: 1.5, delay: 0.6 }}
+//                         />
+//                     );
+//                 })}
+//             </svg>
+//             {NODES.map((node, i) => (
+//                 <motion.div
+//                     key={node.id}
+//                     className="absolute flex flex-col items-center gap-1"
+//                     style={{ left: `${node.x}%`, top: `${node.y}%`, transform: 'translate(-50%, -50%)' }}
+//                     animate={{ y: [0, -5, 0] }}
+//                     transition={{ duration: 4 + i * 0.8, repeat: Infinity, ease: 'easeInOut', delay: i * 0.4 }}
+//                     initial={{ opacity: 0 }}
+//                     whileInView={{ opacity: 1 }}
+//                     viewport={{ once: true }}
+//                 >
+//                     <div
+//                         className="w-2 h-2 rounded-full"
+//                         style={{ backgroundColor: node.color, boxShadow: `0 0 8px ${node.color}80` }}
+//                     />
+//                     <span className="font-mono text-[8px] whitespace-nowrap" style={{ color: node.color, opacity: 0.5 }}>
+//                         {node.label}
+//                     </span>
+//                 </motion.div>
+//             ))}
+//         </div>
+//     );
+// };
 
-    const colorMap = {
-        cmd: 'text-[#E5E5E5]',
-        muted: 'text-[#8B8B90]',
-        accent: 'text-[#00E5FF]',
-        green: 'text-[#28C840]',
+const BADGES = ['Multithreading', 'Distributed Systems', 'Low Latency', 'FIX Protocol'];
+
+const Hero = () => {
+    const heroRef = useRef(null);
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
+
+    const springX = useSpring(mouseX, { stiffness: 50, damping: 20 });
+    const springY = useSpring(mouseY, { stiffness: 50, damping: 20 });
+
+    const panelX = useTransform(springX, [-1, 1], [-12, 12]);
+    const panelY = useTransform(springY, [-1, 1], [-8, 8]);
+
+    const handleMouseMove = (e) => {
+        const rect = heroRef.current?.getBoundingClientRect();
+        if (!rect) return;
+        mouseX.set(((e.clientX - rect.left) / rect.width) * 2 - 1);
+        mouseY.set(((e.clientY - rect.top) / rect.height) * 2 - 1);
     };
 
     return (
-        <div className="bg-[#121214] border border-[#1E1E22] rounded-lg overflow-hidden w-full max-w-sm shadow-2xl">
-            {/* Title bar */}
-            <div className="flex items-center gap-1.5 px-4 py-3 border-b border-[#1E1E22] bg-[#0F0F11]">
-                <div className="w-2.5 h-2.5 rounded-full bg-[#FF5F57]" />
-                <div className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]" />
-                <div className="w-2.5 h-2.5 rounded-full bg-[#28C840]" />
-                <span className="ml-2 text-[#8B8B90] text-[10px] font-mono">orderbook_bench.cpp</span>
-            </div>
-            {/* Terminal output */}
-            <div className="p-5 font-mono text-xs space-y-1 min-h-[140px]">
-                {terminalLines.slice(0, visibleCount).map((line, i) => (
-                    <motion.div
-                        key={i}
-                        initial={{ opacity: 0, x: -6 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.25 }}
-                        className={`leading-5 ${colorMap[line.type]}`}
-                    >
-                        {line.text}
-                    </motion.div>
-                ))}
-                {visibleCount < terminalLines.length && (
-                    <span className="text-[#00E5FF] animate-pulse inline-block">â–Š</span>
-                )}
-            </div>
-        </div>
-    );
-};
+        <section
+            id="top"
+            ref={heroRef}
+            onMouseMove={handleMouseMove}
+            className="relative min-h-screen flex items-center pt-20 pb-12 overflow-hidden"
+        >
+            {/* Background system nodes */}
+            {/* <SystemNodes /> */}
 
-const Hero = () => {
-    return (
-        <section id="top" className="min-h-screen flex items-center pt-20 pb-12">
-            <div className="max-w-6xl mx-auto px-6 w-full">
-                <div className="grid lg:grid-cols-2 gap-16 items-center">
-                    {/* Left â€” text */}
+            <div className="max-w-6xl mx-auto px-6 w-full relative z-10">
+                <div className="grid lg:grid-cols-2 gap-12 xl:gap-20 items-center">
+
+                    {/* Left column: text content */}
                     <div>
                         <motion.span
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5 }}
-                            className="font-mono text-[#00E5FF] text-[11px] tracking-[0.25em] uppercase mb-5 block"
+                            className="font-mono text-[#00E5FF] text-[11px] tracking-[0.25em] uppercase mb-6 block"
                         >
                             Open to opportunities
                         </motion.span>
@@ -80,7 +115,7 @@ const Hero = () => {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6, delay: 0.1 }}
-                            className="text-5xl sm:text-6xl font-bold text-[#E5E5E5] tracking-tight leading-[1.1] mb-3"
+                            className="text-5xl sm:text-6xl font-bold text-[#E5E5E5] tracking-tight leading-[1.08] mb-3"
                         >
                             Shubham<br />Gavkare
                         </motion.h1>
@@ -89,7 +124,7 @@ const Hero = () => {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6, delay: 0.2 }}
-                            className="font-mono text-lg text-[#8B5CF6] mb-4 font-medium"
+                            className="font-mono text-base text-[#8B5CF6] mb-4 font-medium tracking-wide"
                         >
                             C++ Systems Engineer
                         </motion.h2>
@@ -97,21 +132,28 @@ const Hero = () => {
                         <motion.p
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, delay: 0.3 }}
-                            className="font-mono text-[#8B8B90] text-[11px] tracking-wide leading-5 mb-2"
+                            transition={{ duration: 0.6, delay: 0.28 }}
+                            className="text-[#8B8B90] text-sm leading-relaxed mb-6 max-w-md"
                         >
-                            Low-Latency Trading Systems Â· Multithreading<br />
-                            Distributed Systems Â· FIX Protocol
+                            Building low-latency systems where microseconds matter.
                         </motion.p>
 
-                        <motion.p
-                            initial={{ opacity: 0, y: 20 }}
+                        {/* Domain badges */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 16 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6, delay: 0.35 }}
-                            className="text-[#8B8B90] text-sm leading-relaxed mt-4 mb-8 max-w-md"
+                            className="flex flex-wrap gap-2 mb-8"
                         >
-                            Building high-performance trading infrastructure and real-time market-data pipelines.
-                        </motion.p>
+                            {BADGES.map((badge) => (
+                                <span
+                                    key={badge}
+                                    className="font-mono text-[10px] px-2.5 py-1 bg-[#121214] border border-[#1E1E22] text-[#8B8B90] rounded hover:border-[#00E5FF]/30 hover:text-[#00E5FF] transition-all duration-200 cursor-default"
+                                >
+                                    {badge}
+                                </span>
+                            ))}
+                        </motion.div>
 
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
@@ -146,14 +188,15 @@ const Hero = () => {
                         </motion.div>
                     </div>
 
-                    {/* Right â€” terminal widget */}
+                    {/* Right column: profile system panel with mouse parallax */}
                     <motion.div
-                        initial={{ opacity: 0, x: 24 }}
+                        style={{ x: panelX, y: panelY }}
+                        initial={{ opacity: 0, x: 32 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.8, delay: 0.55 }}
+                        transition={{ duration: 0.9, delay: 0.5 }}
                         className="flex justify-center lg:justify-end"
                     >
-                        <TerminalWidget />
+                        <ProfileSystemPanel />
                     </motion.div>
                 </div>
             </div>
@@ -162,3 +205,4 @@ const Hero = () => {
 };
 
 export default Hero;
+
