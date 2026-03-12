@@ -246,7 +246,7 @@ const ProfileSystemPanel = () => {
                     transition={{ delay: 1.4 }}
                 >
                     <span className="font-mono text-[9px] text-[#8B5CF6] uppercase tracking-wider">
-                        μs DOMAIN
+                        µs DOMAIN
                     </span>
                 </motion.div>
             </div>

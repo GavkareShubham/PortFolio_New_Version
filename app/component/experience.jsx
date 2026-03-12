@@ -4,27 +4,27 @@ import { motion } from 'framer-motion';
 
 const experiences = [
     {
-        role: 'C++ Systems Developer',
-        company: 'Trading Infrastructure',
-        period: '2023 – Present',
-        desc: 'Designed and optimized lock-free order book engines and FIX protocol session layers for high-frequency trading. Reduced critical-path latency from 200µs to under 50µs through cache-aware data structures and CPU affinity pinning.',
-        tags: ['C++20', 'FIX Protocol', 'Lock-Free', 'Linux', 'CPU Affinity'],
+        role: 'Associate Software Developer',
+        company: 'FlexTrade Systems',
+        period: 'Nov 2025 – Present',
+        desc: 'Develop high-performance C++ trading infrastructure for the Fixed Income stack of FlexTRADER EMS used by institutional trading desks globally. Build market-data normalization layers integrating 40+ brokers and venues, translating venue-specific FIX dialects into unified internal protocols. Design low-latency event-driven pipelines for market data ingestion, asynchronous processing, and real-time order book aggregation while supporting end-to-end trade lifecycle including RFQ workflows, order routing, and execution reporting.',
+        tags: ['C++20', 'FIX Protocol', 'Market Data', 'Multithreading', 'Linux'],
     },
     {
-        role: 'Software Engineer — Market Data',
-        company: 'Systems Engineering',
-        period: '2022 – 2023',
-        desc: 'Built real-time ITCH 5.0 and OUCH feed handlers using UDP multicast with zero-copy ring-buffer processing. Implemented kernel-bypass networking achieving sub-10µs parse latency at 5M messages per second.',
-        tags: ['C++17', 'UDP Multicast', 'ITCH 5.0', 'Multithreading', 'RDMA'],
+        role: 'Associate Engineer + Trainee',
+        company: 'KPIT Technologies',
+        period: 'Dec 2023 – Oct 2025',
+        desc: 'Engineered backend systems and agentic AI workflows using LangGraph, Langflow, and RAG pipelines integrated with PostgreSQL + pgvector, improving automation accuracy and team productivity by 20%. Built high-performance C++ modules on Linux using STL, multithreading, and design patterns while optimizing CAN Bus communication via efficient bit-level manipulation and deterministic memory management. Developed containerized MCP servers and automated CI/CD pipelines with CMake, GitLab CI, and GitHub Actions.',
+        tags: ['C++17/20', 'Docker', 'LangGraph', 'PostgreSQL', 'CI/CD'],
     },
 ];
 
 const education = [
     {
-        degree: 'B.E. Computer Engineering',
-        institution: 'Savitribai Phule Pune University',
-        period: '2020 – 2024',
-        note: 'GPA: 8.5/10 · Relevant: OS, Networks, Data Structures, Algorithms',
+        degree: 'B.Tech Information Technology',
+        institution: 'JSPM Rajarshi Shahu College of Engineering',
+        period: 'Aug 2020 – Jun 2024',
+        note: 'Savitribai Phule Pune University · CGPA: 9.02/10 · Percentage: 82.7 · Relevant: Data Structures, Algorithms, OOP, Operating Systems',
     },
 ];
 
@@ -107,7 +107,8 @@ const Experience = () => {
                             <p className="font-mono text-[#00E5FF] text-[10px] tracking-widest uppercase mb-3">Core Skills</p>
                             <div className="space-y-2">
                                 {[
-                                    'Modern C++ (17/20)',
+                                    'Modern C++ (11/14/17/20)',
+                                    'Go',
                                     'Multithreading & Concurrency',
                                     'Lock-free Data Structures',
                                     'Network Programming',

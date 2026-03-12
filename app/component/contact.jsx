@@ -70,9 +70,7 @@ const Contact = () => {
                         transition={{ duration: 0.5 }}
                     >
                         <p className="text-[#8B8B90] text-sm leading-relaxed mb-8 max-w-md">
-                            Open to roles in systems engineering, trading infrastructure, and low-latency
-                            software development. Happy to discuss technical architecture, performance
-                            optimization, or just geek out about C++.
+                            Building fast systems where performance matters. Always up for talking C++, Go, low-latency engineering, or cool system designs.
                         </p>
 
                         <div className="space-y-3">

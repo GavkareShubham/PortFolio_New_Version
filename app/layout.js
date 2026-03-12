@@ -18,7 +18,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata = {
   title: "Shubham Gavkare — Software Engineer",
   description:
-    "Low-Latency Trading Systems · Multithreading · Distributed Systems · FIX Protocol",
+    "Low-Latency Trading Systems · Multithreading · Distributed Systems",
 };
 
 export default function RootLayout({ children }) {

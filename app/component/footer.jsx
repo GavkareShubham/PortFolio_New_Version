@@ -13,7 +13,9 @@ const Footer = () => {
                 <div className="flex items-center gap-3">
                     <span className="font-mono text-[#00E5FF] text-xs">sg.dev</span>
                     <span className="text-[#1E1E22]">·</span>
-                    <span className="font-mono text-[#8B8B90] text-xs">© 2025 Shubham Gavkare</span>
+                    <span className="font-mono text-[#8B8B90] text-xs"><p className="text-[#8B8B90] text-xs">
+                        © {new Date().getFullYear()} Shubham Gavkare
+                    </p></span>
                 </div>
                 <div className="flex items-center gap-6">
                     {links.map((link) => (

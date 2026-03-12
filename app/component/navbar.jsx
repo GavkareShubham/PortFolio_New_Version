@@ -43,10 +43,12 @@ const Navbar = () => {
 
                 {/* Hire Me CTA */}
                 <a
-                    href="mailto:shubhamgavkare07@gmail.com?subject=Hiring%20Inquiry"
+                    href="https://mail.google.com/mail/?view=cm&fs=1&to=shubhamgavkare07@gmail.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="hidden md:block font-mono text-xs bg-[#00E5FF] text-[#0B0B0C] px-4 py-2 rounded font-bold hover:shadow-[0_0_22px_rgba(0,229,255,0.45)] hover:bg-[#00E5FF]/90 transition-all duration-200"
                 >
-                    Hire Me
+                    Hire Me →
                 </a>
 
                 {/* Mobile menu button */}
@@ -78,7 +80,7 @@ const Navbar = () => {
                         </Link>
                     ))}
                     <a
-                        href="mailto:shubhamgavkare07@gmail.com?subject=Hiring%20Inquiry"
+                        href="mailto:shubhamgavkare07@gmail.com"
                         className="block font-mono text-xs text-[#00E5FF] font-bold pt-1"
                     >
                         Hire Me →

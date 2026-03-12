@@ -67,7 +67,7 @@ const EDGES = [
 //     );
 // };
 
-const BADGES = ['Multithreading', 'Distributed Systems', 'Low Latency', 'FIX Protocol'];
+const BADGES = ['Multithreading', 'Distributed Systems', 'Low Latency', 'Performance Engineering'];
 
 const Hero = () => {
     const heroRef = useRef(null);
@@ -126,7 +126,7 @@ const Hero = () => {
                             transition={{ duration: 0.6, delay: 0.2 }}
                             className="font-mono text-base text-[#8B5CF6] mb-4 font-medium tracking-wide"
                         >
-                            C++ Systems Engineer
+                            C++ Software Engineer
                         </motion.h2>
 
                         <motion.p
@@ -135,7 +135,7 @@ const Hero = () => {
                             transition={{ duration: 0.6, delay: 0.28 }}
                             className="text-[#8B8B90] text-sm leading-relaxed mb-6 max-w-md"
                         >
-                            Building low-latency systems where microseconds matter.
+                            Engineering systems where speed is a feature.
                         </motion.p>
 
                         {/* Domain badges */}

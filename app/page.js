@@ -114,7 +114,7 @@ const Page = () => {
         <Hero />
         <Metrics />
         <Projects />
-        <Architecture />
+        {/* <Architecture /> */}
         <InsightsPreview />
         <Experience />
         <CodingActivity />

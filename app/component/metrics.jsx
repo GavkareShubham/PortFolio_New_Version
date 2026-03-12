@@ -3,19 +3,19 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 const profileLines = [
-    { key: 'languages', value: 'C++17/20, Python, Go' },
-    { key: 'specialization', value: 'low-latency trading systems' },
-    { key: 'focus', value: 'distributed market-data pipelines' },
-    { key: 'infrastructure', value: 'Linux, TCP/IP, RDMA' },
-    { key: 'patterns', value: 'lock-free queues, SPSC, MPSC' },
-    { key: 'protocols', value: 'FIX 4.2/4.4, ITCH 5.0, OUCH' },
+    { key: 'languages', value: 'C++11/14/17/20, Python, Go' },
+    { key: 'specialization', value: 'high-performance backend systems' },
+    { key: 'focus', value: 'real-time data processing & distributed systems' },
+    { key: 'infrastructure', value: 'Linux, TCP/IP, Docker' },
+    { key: 'patterns', value: 'lock-free queues, concurrency, event-driven systems' },
+    { key: 'protocols', value: 'FIX, REST, WebSockets' },
 ];
 
 const stats = [
-    { value: '1.2M+', label: 'ops/sec throughput' },
-    { value: '<50µs', label: 'p50 order-book latency' },
-    { value: '5M+', label: 'market msgs/sec' },
-    { value: '500+', label: 'LeetCode problems' },
+    { value: '100K+', label: 'events/sec processed' },
+    { value: '<1ms', label: 'pipeline latency' },
+    { value: 'Real-time', label: 'stream processing' },
+    { value: '700+', label: 'LeetCode problems' },
 ];
 
 const Metrics = () => {
