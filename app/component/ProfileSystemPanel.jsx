@@ -245,9 +245,7 @@ const ProfileSystemPanel = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 1.4 }}
                 >
-                    <span className="font-mono text-[9px] text-[#8B5CF6] uppercase tracking-wider">
-                        SYSTEMS DOMAIN
-                    </span>
+                   
                 </motion.div>
             </div>
 

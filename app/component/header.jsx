@@ -126,7 +126,7 @@ const Hero = () => {
                             transition={{ duration: 0.6, delay: 0.2 }}
                             className="font-mono text-base text-[#8B5CF6] mb-4 font-medium tracking-wide"
                         >
-                            C++ Software Engineer
+                            Software Engineer — C++, Go, and problem solving.
                         </motion.h2>
 
                         <motion.p
